@@ -8,19 +8,19 @@
 class Vector
 {
 private:
-    std::vector<float> vector;
+    std::vector<double> vector;
 
 public:
-    explicit Vector(const std::vector<float> &vector) : vector(vector) {}
+    explicit Vector(const std::vector<double> &vector) : vector(vector) {}
     explicit Vector(size_t size)
     {
         vector.resize(size);
     }
 
-    Vector operator+(const float scalar) const
+    Vector operator+(const double scalar) const
     {
         Vector result(*this);
-        std::transform(result.vector.begin(), result.vector.end(), result.vector.begin(), [scalar](float x)
+        std::transform(result.vector.begin(), result.vector.end(), result.vector.begin(), [scalar](double x)
                        { return x + scalar; });
         return result;
     }
@@ -28,14 +28,14 @@ public:
     Vector operator+(Vector &other) const
     {
         Vector result(*this);
-        std::transform(result.vector.begin(), result.vector.end(), other.vector.begin(), result.vector.begin(), std::plus<float>());
+        std::transform(result.vector.begin(), result.vector.end(), other.vector.begin(), result.vector.begin(), std::plus<double>());
         return result;
     }
 
-    Vector operator-(const float scalar) const
+    Vector operator-(const double scalar) const
     {
         Vector result(*this);
-        std::transform(result.vector.begin(), result.vector.end(), result.vector.begin(), [scalar](float x)
+        std::transform(result.vector.begin(), result.vector.end(), result.vector.begin(), [scalar](double x)
                        { return x - scalar; });
         return *this;
     }
@@ -43,14 +43,14 @@ public:
     Vector operator-(const Vector &other) const
     {
         Vector result(*this);
-        std::transform(result.vector.begin(), result.vector.end(), other.vector.begin(), result.vector.begin(), std::minus<float>());
+        std::transform(result.vector.begin(), result.vector.end(), other.vector.begin(), result.vector.begin(), std::minus<double>());
         return result;
     }
 
-    Vector operator*(const float scalar) const
+    Vector operator*(const double scalar) const
     {
         Vector result(*this);
-        std::transform(result.vector.begin(), result.vector.end(), result.vector.begin(), [scalar](float x)
+        std::transform(result.vector.begin(), result.vector.end(), result.vector.begin(), [scalar](double x)
                        { return x * scalar; });
         return *this;
     }
@@ -58,14 +58,14 @@ public:
     Vector operator*(const Vector &other) const
     {
         Vector result(*this);
-        std::transform(result.vector.begin(), result.vector.end(), other.vector.begin(), result.vector.begin(), std::multiplies<float>());
+        std::transform(result.vector.begin(), result.vector.end(), other.vector.begin(), result.vector.begin(), std::multiplies<double>());
         return result;
     }
 
-    Vector operator/(const float scalar) const
+    Vector operator/(const double scalar) const
     {
         Vector result(*this);
-        std::transform(result.vector.begin(), result.vector.end(), result.vector.begin(), [scalar](float x)
+        std::transform(result.vector.begin(), result.vector.end(), result.vector.begin(), [scalar](double x)
                        { return x / scalar; });
         return *this;
     }
@@ -73,7 +73,7 @@ public:
     Vector operator/(const Vector &other) const
     {
         Vector result(*this);
-        std::transform(result.vector.begin(), result.vector.end(), other.vector.begin(), result.vector.begin(), std::divides<float>());
+        std::transform(result.vector.begin(), result.vector.end(), other.vector.begin(), result.vector.begin(), std::divides<double>());
         return result;
     }
 
@@ -87,10 +87,10 @@ public:
         std::fill(vector.begin(), vector.end(), 0);
     }
 
-    float sum() const
+    double sum() const
     {
-        float sum = 0;
-        for (const float &element : vector)
+        double sum = 0;
+        for (const double &element : vector)
         {
             sum += element;
         }
@@ -98,21 +98,21 @@ public:
         return sum;
     }
 
-    float get(const size_t i) const
+    double get(const size_t i) const
     {
         return vector[i];
     }
 
-    float dot(const Vector &other) const
+    double dot(const Vector &other) const
     {
         Vector result(*this);
-        std::transform(result.vector.begin(), result.vector.end(), other.vector.begin(), result.vector.begin(), std::multiplies<float>());
+        std::transform(result.vector.begin(), result.vector.end(), other.vector.begin(), result.vector.begin(), std::multiplies<double>());
         return result.sum();
     }
 
     void print() const
     {
-        for (const float &element : vector)
+        for (const double &element : vector)
         {
             std::cout << element << " ";
         }

@@ -9,23 +9,23 @@
 class Matrix
 {
 private:
-    std::vector<std::vector<float>> matrix;
+    std::vector<std::vector<double>> matrix;
     size_t rows;
     size_t cols;
 
 public:
-    explicit Matrix(const std::vector<std::vector<float>> &matrix) : matrix(matrix), rows(matrix.size()), cols(matrix[0].size()) {}
+    explicit Matrix(const std::vector<std::vector<double>> &matrix) : matrix(matrix), rows(matrix.size()), cols(matrix[0].size()) {}
 
     explicit Matrix(size_t rows, size_t cols) : rows(rows), cols(cols)
     {
         matrix.resize(rows);
-        for (std::vector<float> &row : matrix)
+        for (std::vector<double> &row : matrix)
         {
             row.resize(cols);
         }
     }
 
-    Matrix operator+(const float scalar) const
+    Matrix operator+(const double scalar) const
     {
         Matrix result(*this);
         for (int i = 0; i < rows; i++)
@@ -51,7 +51,7 @@ public:
         return result;
     }
 
-    Matrix operator-(const float scalar) const
+    Matrix operator-(const double scalar) const
     {
         Matrix result(*this);
         for (int i = 0; i < rows; i++)
@@ -77,7 +77,7 @@ public:
         return result;
     }
 
-    Matrix operator*(const float scalar) const
+    Matrix operator*(const double scalar) const
     {
         Matrix result(*this);
         for (int i = 0; i < rows; i++)
@@ -103,7 +103,7 @@ public:
         return result;
     }
 
-    Matrix operator/(const float scalar) const
+    Matrix operator/(const double scalar) const
     {
         Matrix result(*this);
         for (int i = 0; i < rows; i++)
@@ -175,19 +175,30 @@ public:
         return std::make_pair(rows, cols);
     }
 
-    Vector getRow(const size_t i) const
+    Vector get_row(const size_t i) const
     {
         return Vector(matrix[i]);
     }
 
-    Vector getCol(const size_t i) const
+    Vector get_col(const size_t i) const
     {
-        std::vector<float> col;
+        std::vector<double> col;
         for (int j = 0; j < rows; j++)
         {
             col.push_back(matrix[j][i]);
         }
         return Vector(col);
+    }
+
+    void add_row(const std::vector<double> &v)
+    {
+        matrix.push_back(v);
+    }
+
+    void set_shape(const size_t nrows, const size_t ncols)
+    {
+        this->rows = nrows;
+        this->cols = ncols;
     }
 };
 
