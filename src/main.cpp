@@ -10,7 +10,6 @@ int main()
 {
 
     Matrix mat = data_importer::import_csv("Salary_dataset.csv");
-    std::cout << std::endl;
 
     feature_scaling::FeatureScaling f_scaling(mat, feature_scaling::ScalingType::max_abs);
 
