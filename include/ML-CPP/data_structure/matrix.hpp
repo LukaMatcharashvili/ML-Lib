@@ -200,7 +200,7 @@ public:
         this->cols = ncols;
     }
 
-    Matrix submatrix(const size_t row_start, const size_t row_end, const size_t col_start, const size_t col_end) const
+    Matrix sub_matrix(const size_t row_start, const size_t row_end, const size_t col_start, const size_t col_end) const
     {
         Matrix result(row_end - row_start, col_end - col_start);
         for (size_t i = row_start; i < row_end; i++)

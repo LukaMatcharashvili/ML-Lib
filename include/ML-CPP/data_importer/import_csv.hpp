@@ -10,8 +10,8 @@ namespace data_importer
 {
     Matrix import_csv(const std::string &filename)
     {
-        std::ifstream inputFile(filename);
-        if (!inputFile.is_open())
+        std::ifstream input_file(filename);
+        if (!input_file.is_open())
         {
             std::cerr << "Error opening the file!" << std::endl;
             exit(1);
@@ -23,7 +23,7 @@ namespace data_importer
         size_t cols = 0;
         Matrix matrix(0, 0);
 
-        while (getline(inputFile, line))
+        while (getline(input_file, line))
         {
             if (line.empty())
                 continue;
@@ -57,7 +57,7 @@ namespace data_importer
         }
 
         matrix.set_shape(rows, cols);
-        inputFile.close();
+        input_file.close();
 
         return matrix;
     }

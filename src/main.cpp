@@ -11,7 +11,7 @@ int main()
     Matrix mat = data_importer::import_csv("Salary_dataset.csv");
     std::cout << std::endl;
 
-    Matrix X = mat.submatrix(0, mat.shape().first, 0, mat.shape().second - 1);
+    Matrix X = mat.sub_matrix(0, mat.shape().first, 0, mat.shape().second - 1);
     Vector y = mat.get_col(mat.shape().second - 1);
 
     LinearRegression lr(X, y, 10000);
