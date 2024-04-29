@@ -14,7 +14,7 @@ int main()
     Matrix X = mat.submatrix(0, mat.shape().first, 0, mat.shape().second - 1);
     Vector y = mat.get_col(mat.shape().second - 1);
 
-    LinearRegression lr(X, y, 750000);
+    LinearRegression lr(X, y, 10000);
 
     lr.train();
 
