@@ -189,6 +189,16 @@ public:
         return Vector(col);
     }
 
+    double get_value(const size_t i, const size_t j) const
+    {
+        return matrix[i][j];
+    }
+
+    void set_value(const size_t i, const size_t j, const double value)
+    {
+        matrix[i][j] = value;
+    }
+
     void add_row(const std::vector<double> &v)
     {
         matrix.push_back(v);

@@ -111,6 +111,11 @@ public:
         return vector[i];
     }
 
+    void set(const size_t i, const double value)
+    {
+        vector[i] = value;
+    }
+
     double dot(const Vector &other) const
     {
         Vector result(*this);
