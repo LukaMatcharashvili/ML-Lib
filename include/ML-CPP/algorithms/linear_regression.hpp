@@ -10,43 +10,46 @@ class LinearRegression
 private:
     Matrix X;
     Vector y;
-    Vector weights;
+    Vector w;
     size_t epochs;
     double b = 0;
-    double lr = 0.01f;
+    double lr;
 
 public:
-    LinearRegression(const Matrix &X, const Vector &y, const size_t epochs) : X(X), y(y), weights(Vector(y.size())), epochs(epochs) {}
+    LinearRegression(const Matrix &X, const Vector &y, const size_t epochs, const double lr) : X(X), y(y), w(Vector(X.shape().second)), epochs(epochs), lr(lr) {}
+    LinearRegression(const Matrix &X, const Vector &y, const size_t epochs) : X(X), y(y), w(Vector(X.shape().second)), epochs(epochs), lr(0.01) {}
+
+    void print_weights() const
+    {
+        w.print();
+        std::cout << "b: " << b << std::endl;
+    }
 
     void train()
     {
         for (size_t i = 0; i < epochs; i++)
         {
-            Vector dw = x_cost();
+            Vector dw = w_cost();
             double db = b_cost();
-            Vector lrdw = dw * lr;
-            weights = weights - lrdw;
+            w = w - (dw * lr);
             b = b - lr * db;
-
-            std::cout << "Epoch: " << i << " Cost: " << db << std::endl;
         }
     }
 
-    Vector x_cost() const
+    Vector w_cost() const
     {
         const std::pair<int, int> shape = X.shape();
         Vector sum(shape.second);
         sum.zeros();
+
         for (int i = 0; i < shape.first; i++)
         {
             Vector row = X.get_row(i);
-            double prediction = row.dot(weights);
-            double error = prediction - y.get(i);
-            Vector v = row * error;
-            sum = sum + v;
+            double error = predict(row) - y.get(i);
+            sum = (row * error) + sum;
         }
 
-        return sum;
+        return sum * (1.0f / (float)shape.first);
     }
 
     double b_cost() const
@@ -54,18 +57,13 @@ public:
         const std::pair<int, int> shape = X.shape();
         double sum = 0;
         for (int i = 0; i < shape.first; i++)
-        {
-            Vector row = X.get_row(i);
-            double prediction = row.dot(weights);
-            double error = prediction - y.get(i);
-            sum += error;
-        }
+            sum += predict(X.get_row(i)) - y.get(i);
 
-        return (1.0f / (double)shape.first) * sum;
+        return sum * (1.0f / (float)shape.first);
     }
 
     double predict(const Vector &x) const
     {
-        return x.dot(weights);
+        return x.dot(w) + b;
     }
 };

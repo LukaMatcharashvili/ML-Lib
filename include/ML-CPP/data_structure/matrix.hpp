@@ -3,7 +3,6 @@
 
 #include <iostream>
 #include <vector>
-#include <algorithm>
 #include "vector.hpp"
 
 class Matrix
@@ -199,6 +198,19 @@ public:
     {
         this->rows = nrows;
         this->cols = ncols;
+    }
+
+    Matrix submatrix(const size_t row_start, const size_t row_end, const size_t col_start, const size_t col_end) const
+    {
+        Matrix result(row_end - row_start, col_end - col_start);
+        for (size_t i = row_start; i < row_end; i++)
+        {
+            for (size_t j = col_start; j < col_end; j++)
+            {
+                result.matrix[i - row_start][j - col_start] = matrix[i][j];
+            }
+        }
+        return result;
     }
 };
 

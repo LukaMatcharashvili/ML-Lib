@@ -3,7 +3,6 @@
 
 #include <iostream>
 #include <vector>
-#include <algorithm>
 
 class Vector
 {
@@ -20,60 +19,64 @@ public:
     Vector operator+(const double scalar) const
     {
         Vector result(*this);
-        std::transform(result.vector.begin(), result.vector.end(), result.vector.begin(), [scalar](double x)
-                       { return x + scalar; });
+        for (int i = 0; i < result.size(); i++)
+            result.vector[i] += scalar;
         return result;
     }
 
     Vector operator+(Vector &other) const
     {
         Vector result(*this);
-        std::transform(result.vector.begin(), result.vector.end(), other.vector.begin(), result.vector.begin(), std::plus<double>());
+        for (int i = 0; i < result.size(); i++)
+            result.vector[i] += other.vector[i];
         return result;
     }
 
     Vector operator-(const double scalar) const
     {
         Vector result(*this);
-        std::transform(result.vector.begin(), result.vector.end(), result.vector.begin(), [scalar](double x)
-                       { return x - scalar; });
-        return *this;
+        for (int i = 0; i < result.size(); i++)
+            result.vector[i] -= scalar;
+        return result;
     }
 
     Vector operator-(const Vector &other) const
     {
         Vector result(*this);
-        std::transform(result.vector.begin(), result.vector.end(), other.vector.begin(), result.vector.begin(), std::minus<double>());
+        for (int i = 0; i < result.size(); i++)
+            result.vector[i] -= other.vector[i];
         return result;
     }
 
     Vector operator*(const double scalar) const
     {
         Vector result(*this);
-        std::transform(result.vector.begin(), result.vector.end(), result.vector.begin(), [scalar](double x)
-                       { return x * scalar; });
-        return *this;
+        for (int i = 0; i < result.size(); i++)
+            result.vector[i] *= scalar;
+        return result;
     }
 
     Vector operator*(const Vector &other) const
     {
         Vector result(*this);
-        std::transform(result.vector.begin(), result.vector.end(), other.vector.begin(), result.vector.begin(), std::multiplies<double>());
+        for (int i = 0; i < result.size(); i++)
+            result.vector[i] *= other.vector[i];
         return result;
     }
 
     Vector operator/(const double scalar) const
     {
         Vector result(*this);
-        std::transform(result.vector.begin(), result.vector.end(), result.vector.begin(), [scalar](double x)
-                       { return x / scalar; });
-        return *this;
+        for (int i = 0; i < result.size(); i++)
+            result.vector[i] /= scalar;
+        return result;
     }
 
     Vector operator/(const Vector &other) const
     {
         Vector result(*this);
-        std::transform(result.vector.begin(), result.vector.end(), other.vector.begin(), result.vector.begin(), std::divides<double>());
+        for (int i = 0; i < result.size(); i++)
+            result.vector[i] /= other.vector[i];
         return result;
     }
 
@@ -106,16 +109,15 @@ public:
     double dot(const Vector &other) const
     {
         Vector result(*this);
-        std::transform(result.vector.begin(), result.vector.end(), other.vector.begin(), result.vector.begin(), std::multiplies<double>());
+        for (int i = 0; i < result.size(); i++)
+            result.vector[i] *= other.vector[i];
         return result.sum();
     }
 
     void print() const
     {
         for (const double &element : vector)
-        {
             std::cout << element << " ";
-        }
         std::cout << std::endl;
     }
 };
