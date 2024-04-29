@@ -212,6 +212,11 @@ public:
         }
         return result;
     }
+
+    void set_row(const size_t i, const Vector &v)
+    {
+        matrix[i] = v.get_vector();
+    }
 };
 
 #endif // MATRIX_HPP

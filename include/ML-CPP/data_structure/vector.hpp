@@ -16,6 +16,11 @@ public:
         vector.resize(size);
     }
 
+    std::vector<double> get_vector() const
+    {
+        return vector;
+    }
+
     Vector operator+(const double scalar) const
     {
         Vector result(*this);
