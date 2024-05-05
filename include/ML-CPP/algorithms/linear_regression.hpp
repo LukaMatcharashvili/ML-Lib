@@ -18,6 +18,16 @@ public:
     LinearRegression(const Matrix &X, const Vector &y, const double lr) : X(X), y(y), w(Vector(X.shape().second)), lr(lr) {}
     LinearRegression(const Matrix &X, const Vector &y) : X(X), y(y), w(Vector(X.shape().second)), lr(0.01) {}
 
+    Vector get_weights() const
+    {
+        return w;
+    }
+
+    double get_bias() const
+    {
+        return b;
+    }
+
     void print_weights() const
     {
         w.print();

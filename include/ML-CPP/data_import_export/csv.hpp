@@ -6,7 +6,7 @@
 
 #include "../data_structure/matrix.hpp"
 
-namespace data_importer
+namespace data_import_export
 {
     Matrix import_csv(const std::string &filename)
     {

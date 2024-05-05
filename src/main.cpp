@@ -1,7 +1,8 @@
 #include <vector>
 #include <fstream>
 #include <string>
-#include <ML-CPP/data_importer/import_csv.hpp>
+#include <ML-CPP/data_import_export/csv.hpp>
+#include <ML-CPP/data_import_export/weights.hpp>
 #include <ML-CPP/data_structure/matrix.hpp>
 #include <ML-CPP/algorithms/linear_regression.hpp>
 #include <ML-CPP/algorithms/feature_scaling.hpp>
@@ -9,7 +10,7 @@
 int main()
 {
 
-    Matrix mat = data_importer::import_csv("Salary_dataset.csv");
+    Matrix mat = data_import_export::import_csv("Salary_dataset.csv");
 
     feature_scaling::FeatureScaling f_scaling(mat, feature_scaling::ScalingType::max_abs);
 
@@ -23,6 +24,8 @@ int main()
     lr.train();
 
     lr.print_weights();
+
+    data_import_export::export_weights_and_biases("weights", lr.get_weights(), lr.get_bias());
 
     Vector train(std::vector<double>{3});
     Vector scaled_train = f_scaling.scale(train);
