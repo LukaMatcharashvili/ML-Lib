@@ -15,8 +15,9 @@ Features:
 - [x] Loading and saving weights and biases to files
 - [x] Feature scaling
 - [x] Polynomial features
+- [ ] Regularization
 - [x] Linear regression
-- [ ] Logistic regression
+- [x] Logistic regression
 - [ ] Visualization
 - [ ] Neural network
 - [ ] Decision tree

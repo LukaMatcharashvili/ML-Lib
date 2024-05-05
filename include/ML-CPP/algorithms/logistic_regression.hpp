@@ -1,5 +1,5 @@
-#ifndef ALG_LIN_REG_H
-#define ALG_LIN_REG_H
+#ifndef ALG_LOG_REG_H
+#define ALG_LOG_REG_H
 
 #include <iostream>
 #include <vector>
@@ -7,10 +7,11 @@
 
 #include "../data_structures/matrix.hpp"
 #include "../data_structures/vector.hpp"
+#include "../features/activations.hpp"
 
 namespace algorithms
 {
-    class BatchLinearRegression
+    class BatchLogisticRegression
     {
     private:
         data_structures::Matrix X;
@@ -20,8 +21,8 @@ namespace algorithms
         double lr;
 
     public:
-        BatchLinearRegression(const data_structures::Matrix &X, const data_structures::Vector &y, const double lr) : X(X), y(y), w(data_structures::Vector(X.shape().second)), lr(lr) {}
-        BatchLinearRegression(const data_structures::Matrix &X, const data_structures::Vector &y) : X(X), y(y), w(data_structures::Vector(X.shape().second)), lr(0.01) {}
+        BatchLogisticRegression(const data_structures::Matrix &X, const data_structures::Vector &y, const double lr) : X(X), y(y), w(data_structures::Vector(X.shape().second)), lr(lr) {}
+        BatchLogisticRegression(const data_structures::Matrix &X, const data_structures::Vector &y) : X(X), y(y), w(data_structures::Vector(X.shape().second)), lr(0.01) {}
 
         data_structures::Vector get_weights() const
         {
@@ -85,11 +86,11 @@ namespace algorithms
 
         double predict(const data_structures::Vector &x) const
         {
-            return x.dot(w) + b;
+            return features::activations::sigmoid(x.dot(w) + b);
         }
     };
 
-    class StochasticLinearRegression
+    class StochasticLogisticRegression
     {
     private:
         data_structures::Matrix X;
@@ -99,8 +100,8 @@ namespace algorithms
         double lr;
 
     public:
-        StochasticLinearRegression(const data_structures::Matrix &X, const data_structures::Vector &y, const double lr) : X(X), y(y), w(data_structures::Vector(X.shape().second)), lr(lr) {}
-        StochasticLinearRegression(const data_structures::Matrix &X, const data_structures::Vector &y) : X(X), y(y), w(data_structures::Vector(X.shape().second)), lr(0.01) {}
+        StochasticLogisticRegression(const data_structures::Matrix &X, const data_structures::Vector &y, const double lr) : X(X), y(y), w(data_structures::Vector(X.shape().second)), lr(lr) {}
+        StochasticLogisticRegression(const data_structures::Matrix &X, const data_structures::Vector &y) : X(X), y(y), w(data_structures::Vector(X.shape().second)), lr(0.01) {}
 
         data_structures::Vector get_weights() const
         {
@@ -158,10 +159,10 @@ namespace algorithms
 
         double predict(const data_structures::Vector &x) const
         {
-            return x.dot(w) + b;
+            return features::activations::sigmoid(x.dot(w) + b);
         }
     };
 
 }
 
-#endif // ALG_LIN_REG_H
+#endif // ALG_LOG_REG_H

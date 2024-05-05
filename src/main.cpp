@@ -25,7 +25,7 @@ int main()
     data_structures::Matrix X = scaled_mat.sub_matrix(0, scaled_mat.shape().first, 0, scaled_mat.shape().second - 1);
     data_structures::Vector y = scaled_mat.get_col(scaled_mat.shape().second - 1);
 
-    algorithms::lr::StochasticLinearRegression lr(X, y, 0.001f);
+    algorithms::StochasticLinearRegression lr(X, y, 0.001f);
 
     lr.train();
 
