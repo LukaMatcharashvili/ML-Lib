@@ -11,13 +11,12 @@ private:
     Matrix X;
     Vector y;
     Vector w;
-    size_t epochs;
     double b = 0;
     double lr;
 
 public:
-    LinearRegression(const Matrix &X, const Vector &y, const size_t epochs, const double lr) : X(X), y(y), w(Vector(X.shape().second)), epochs(epochs), lr(lr) {}
-    LinearRegression(const Matrix &X, const Vector &y, const size_t epochs) : X(X), y(y), w(Vector(X.shape().second)), epochs(epochs), lr(0.01) {}
+    LinearRegression(const Matrix &X, const Vector &y, const double lr) : X(X), y(y), w(Vector(X.shape().second)), lr(lr) {}
+    LinearRegression(const Matrix &X, const Vector &y) : X(X), y(y), w(Vector(X.shape().second)), lr(0.01) {}
 
     void print_weights() const
     {
@@ -27,12 +26,21 @@ public:
 
     void train()
     {
-        for (size_t i = 0; i < epochs; i++)
+        while (true)
         {
             Vector dw = w_cost();
             double db = b_cost();
-            w = w - (dw * lr);
-            b = b - lr * db;
+
+            Vector dw_step = dw * lr;
+            double db_step = db * lr;
+
+            std::cout << "Step size: " << db << std::endl;
+
+            if (std::abs(db) < 0.001)
+                break;
+
+            w = w - dw_step;
+            b = b - db_step;
         }
     }
 
@@ -45,11 +53,11 @@ public:
         for (int i = 0; i < shape.first; i++)
         {
             Vector row = X.get_row(i);
-            double error = predict(row) - y.get(i);
-            sum = (row * error) + sum;
+            double error = y.get(i) - predict(row);
+            sum = (row * -2 * error) + sum;
         }
 
-        return sum * (1.0f / (float)shape.first);
+        return sum;
     }
 
     double b_cost() const
@@ -57,9 +65,9 @@ public:
         const std::pair<int, int> shape = X.shape();
         double sum = 0;
         for (int i = 0; i < shape.first; i++)
-            sum += predict(X.get_row(i)) - y.get(i);
+            sum += -2 * (y.get(i) - predict(X.get_row(i)));
 
-        return sum * (1.0f / (float)shape.first);
+        return sum;
     }
 
     double predict(const Vector &x) const

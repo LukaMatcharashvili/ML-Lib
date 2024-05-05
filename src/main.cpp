@@ -18,7 +18,7 @@ int main()
     Matrix X = scaled_mat.sub_matrix(0, scaled_mat.shape().first, 0, scaled_mat.shape().second - 1);
     Vector y = scaled_mat.get_col(scaled_mat.shape().second - 1);
 
-    LinearRegression lr(X, y, 1000);
+    LinearRegression lr(X, y, 0.001f);
 
     lr.train();
 
