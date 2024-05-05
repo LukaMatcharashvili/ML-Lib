@@ -44,8 +44,6 @@ public:
             Vector dw_step = dw * lr;
             double db_step = db * lr;
 
-            std::cout << "Step size: " << db << std::endl;
-
             if (std::abs(db) < 0.001)
                 break;
 
