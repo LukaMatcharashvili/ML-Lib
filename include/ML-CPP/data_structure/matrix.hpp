@@ -131,7 +131,7 @@ public:
     Matrix multiply(const Matrix &other) const
     {
         Matrix result(rows, other.cols);
-        for (int i = 0; i < rows; i++)
+        for (int i = 0; i < rows; i++) // TODO: Parallelize this loop
             for (int k = 0; k < cols; k++)
                 for (int j = 0; j < other.cols; j++)
                     result.matrix[i][j] += matrix[i][k] * other.matrix[k][j];
