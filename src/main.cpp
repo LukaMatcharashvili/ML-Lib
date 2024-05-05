@@ -14,7 +14,7 @@
 
 int main()
 {
-
+    // Example of using the linear regression algorithm: Years of experience, Salary
     data_structures::Matrix mat = data_import_export::import_csv("Salary_dataset.csv");
 
     features::Scaling f_scaling(mat, features::ScalingType::max_abs);
@@ -30,7 +30,7 @@ int main()
 
     lr.print_weights();
 
-    data_import_export::export_weights_and_biases("weights", lr.get_weights(), lr.get_bias());
+    data_import_export::export_weights_and_biases(lr.get_weights(), lr.get_bias());
 
     data_structures::Vector train(std::vector<double>{3});
     data_structures::Vector scaled_train = f_scaling.scale(train);
