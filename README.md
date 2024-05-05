@@ -1,6 +1,6 @@
 ### Machine Learning Library for C++
 
-This is a simple machine learning library for C++ that I wrote for my own learning purposes. It is not meant to be used in production code, but rather as a learning tool for understanding machine learning algorithms. The library is not using any external libraries.
+This is a simple machine learning library for C++ that I wrote for my own learning purposes. It is not meant to be used in production code, but rather as a learning tool for understanding machine learning algorithms. The library is not using any external libraries. Library also supports Vector and Matrix manipulation.
 
 Features:
 
