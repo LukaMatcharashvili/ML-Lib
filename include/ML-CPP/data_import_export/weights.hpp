@@ -1,14 +1,17 @@
+#ifndef DATA_IMP_EXP_WEIGHTS_H
+#define DATA_IMP_EXP_WEIGHTS_H
+
 #include <iostream>
 #include <vector>
 #include <fstream>
 #include <string>
 #include <algorithm>
 
-#include "../data_structure/matrix.hpp"
+#include "../data_structures/vector.hpp"
 
 namespace data_import_export
 {
-    void export_weights_and_biases(const std::string &filename, const Vector &w, const double b)
+    void export_weights_and_biases(const std::string &filename, const data_structures::Vector &w, const double b)
     {
         std::ofstream output_file(filename);
         if (!output_file.is_open())
@@ -26,7 +29,7 @@ namespace data_import_export
         output_file.close();
     }
 
-    std::pair<Vector, double> import_weights_and_biases(const std::string &filename)
+    std::pair<data_structures::Vector, double> import_weights_and_biases(const std::string &filename)
     {
         std::ifstream input_file(filename);
         if (!input_file.is_open())
@@ -57,6 +60,8 @@ namespace data_import_export
 
         input_file.close();
 
-        return std::make_pair(Vector(weights), std::stod(bias_str));
+        return std::make_pair(data_structures::Vector(weights), std::stod(bias_str));
     }
 }
+
+#endif // DATA_IMP_EXP_WEIGHTS_H

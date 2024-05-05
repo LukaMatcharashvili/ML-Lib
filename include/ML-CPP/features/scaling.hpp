@@ -1,12 +1,15 @@
+#ifndef FEATURES_SCALING_H
+#define FEATURES_SCALING_H
+
 #include <iostream>
 #include <vector>
 #include <algorithm>
-
-#include "../data_structure/matrix.hpp"
-#include "../data_structure/vector.hpp"
 #include <cmath>
 
-namespace feature_scaling
+#include "../data_structures/matrix.hpp"
+#include "../data_structures/vector.hpp"
+
+namespace features
 {
     enum class ScalingType
     {
@@ -14,7 +17,7 @@ namespace feature_scaling
         max_abs,
     };
 
-    class FeatureScaling
+    class Scaling
     {
     private:
         ScalingType scaling_type;
@@ -22,7 +25,7 @@ namespace feature_scaling
         std::vector<double> max_values;
         std::vector<double> mean_values;
 
-        void set_min_max_scaling_parameters(const Matrix &mat)
+        void set_min_max_scaling_parameters(const data_structures::Matrix &mat)
         {
             std::pair<size_t, size_t> shape = mat.shape();
             min_values = std::vector<double>(shape.second, 0);
@@ -36,7 +39,7 @@ namespace feature_scaling
                 }
         };
 
-        void set_max_abs_scaling_parameters(const Matrix &mat)
+        void set_max_abs_scaling_parameters(const data_structures::Matrix &mat)
         {
             std::pair<size_t, size_t> shape = mat.shape();
             max_values = std::vector<double>(shape.second, 0);
@@ -46,11 +49,11 @@ namespace feature_scaling
                     max_values[j] = std::max(max_values[j], mat.get_value(i, j));
         };
 
-        Matrix min_max_scaling(const Matrix &mat, const size_t start, const size_t end)
+        data_structures::Matrix min_max_scaling(const data_structures::Matrix &mat, const size_t start, const size_t end)
         {
             std::pair<size_t, size_t> shape = mat.shape();
 
-            Matrix result(shape.first, end - start);
+            data_structures::Matrix result(shape.first, end - start);
             for (size_t i = 0; i < shape.first; i++)
                 for (size_t j = start; j < end; j++)
                     result.set_value(i, j, (mat.get_value(i, j) - min_values[j]) / (max_values[j] - min_values[j]));
@@ -58,11 +61,11 @@ namespace feature_scaling
             return result;
         };
 
-        Matrix max_abs_scaling(const Matrix &mat, const size_t start, const size_t end)
+        data_structures::Matrix max_abs_scaling(const data_structures::Matrix &mat, const size_t start, const size_t end)
         {
             std::pair<size_t, size_t> shape = mat.shape();
 
-            Matrix result(shape.first, end - start);
+            data_structures::Matrix result(shape.first, end - start);
             for (size_t i = 0; i < shape.first; i++)
                 for (size_t j = start; j < end; j++)
                     result.set_value(i, j, mat.get_value(i, j) / max_values[j]);
@@ -71,7 +74,7 @@ namespace feature_scaling
         };
 
     public:
-        explicit FeatureScaling(const Matrix &mat, ScalingType scaling_type = ScalingType::max_abs) : scaling_type(scaling_type)
+        explicit Scaling(const data_structures::Matrix &mat, ScalingType scaling_type = ScalingType::max_abs) : scaling_type(scaling_type)
         {
             switch (scaling_type)
             {
@@ -84,7 +87,7 @@ namespace feature_scaling
             }
         }
 
-        Matrix scale(const Matrix &mat, size_t start, size_t end)
+        data_structures::Matrix scale(const data_structures::Matrix &mat, size_t start, size_t end)
         {
             switch (scaling_type)
             {
@@ -95,7 +98,7 @@ namespace feature_scaling
             }
         }
 
-        Matrix scale(const Matrix &mat)
+        data_structures::Matrix scale(const data_structures::Matrix &mat)
         {
             size_t n_cols = mat.shape().second;
             switch (scaling_type)
@@ -109,20 +112,20 @@ namespace feature_scaling
             }
         }
 
-        Vector scale(const Vector &vec, size_t start, size_t end)
+        data_structures::Vector scale(const data_structures::Vector &vec, size_t start, size_t end)
         {
             switch (scaling_type)
             {
             case ScalingType::min_max:
             {
-                Vector result(end - start);
+                data_structures::Vector result(end - start);
                 for (size_t i = start; i < end; i++)
                     result.set(i, (vec.get(i) - min_values[i]) / (max_values[i] - min_values[i]));
                 return result;
             }
             case ScalingType::max_abs:
             {
-                Vector result(end - start);
+                data_structures::Vector result(end - start);
                 for (size_t i = start; i < end; i++)
                     result.set(i, vec.get(i) / max_values[i]);
                 return result;
@@ -130,21 +133,21 @@ namespace feature_scaling
             }
         }
 
-        Vector scale(const Vector &vec)
+        data_structures::Vector scale(const data_structures::Vector &vec)
         {
             size_t n_cols = vec.size();
             switch (scaling_type)
             {
             case ScalingType::min_max:
             {
-                Vector result(n_cols);
+                data_structures::Vector result(n_cols);
                 for (size_t i = 0; i < n_cols; i++)
                     result.set(i, (vec.get(i) - min_values[i]) / (max_values[i] - min_values[i]));
                 return result;
             }
             case ScalingType::max_abs:
             {
-                Vector result(n_cols);
+                data_structures::Vector result(n_cols);
                 for (size_t i = 0; i < n_cols; i++)
                     result.set(i, vec.get(i) / max_values[i]);
                 return result;
@@ -168,3 +171,5 @@ namespace feature_scaling
         }
     };
 }
+
+#endif // FEATURES_SCALING_H

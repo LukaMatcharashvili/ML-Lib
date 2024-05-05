@@ -1,14 +1,17 @@
+#ifndef DATA_IMP_EXP_CSV_H
+#define DATA_IMP_EXP_CSV_H
+
 #include <iostream>
 #include <vector>
 #include <fstream>
 #include <string>
 #include <algorithm>
 
-#include "../data_structure/matrix.hpp"
+#include "../data_structures/matrix.hpp"
 
 namespace data_import_export
 {
-    Matrix import_csv(const std::string &filename)
+    data_structures::Matrix import_csv(const std::string &filename)
     {
         std::ifstream input_file(filename);
         if (!input_file.is_open())
@@ -21,7 +24,7 @@ namespace data_import_export
 
         size_t rows = 0;
         size_t cols = 0;
-        Matrix matrix(0, 0);
+        data_structures::Matrix matrix(0, 0);
 
         while (getline(input_file, line))
         {
@@ -62,3 +65,5 @@ namespace data_import_export
         return matrix;
     }
 }
+
+#endif // DATA_IMP_EXP_CSV_H
