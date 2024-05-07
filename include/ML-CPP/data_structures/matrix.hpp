@@ -10,32 +10,22 @@ namespace data_structures
     class Matrix
     {
     private:
-        std::vector<std::vector<double>> matrix;
+        std::vector<double> matrix;
         size_t rows;
         size_t cols;
 
     public:
-        explicit Matrix(const std::vector<std::vector<double>> &matrix) : matrix(matrix), rows(matrix.size()), cols(matrix[0].size()) {}
-
         explicit Matrix(size_t rows, size_t cols) : rows(rows), cols(cols)
         {
-            matrix.resize(rows);
-            for (std::vector<double> &row : matrix)
-            {
-                row.resize(cols);
-            }
+            matrix.resize(rows * cols);
         }
 
         Matrix operator+(const double scalar) const
         {
             Matrix result(*this);
             for (int i = 0; i < rows; i++)
-            {
                 for (int j = 0; j < cols; j++)
-                {
-                    result.matrix[i][j] += scalar;
-                }
-            }
+                    result.matrix[i * cols + j] += scalar;
             return result;
         }
 
@@ -43,12 +33,8 @@ namespace data_structures
         {
             Matrix result(*this);
             for (int i = 0; i < rows; i++)
-            {
                 for (int j = 0; j < cols; j++)
-                {
-                    result.matrix[i][j] += other.matrix[i][j];
-                }
-            }
+                    result.matrix[i * cols + j] += other.matrix[i * cols + j];
             return result;
         }
 
@@ -56,12 +42,8 @@ namespace data_structures
         {
             Matrix result(*this);
             for (int i = 0; i < rows; i++)
-            {
                 for (int j = 0; j < cols; j++)
-                {
-                    result.matrix[i][j] -= scalar;
-                }
-            }
+                    result.matrix[i * cols + j] -= scalar;
             return result;
         }
 
@@ -69,12 +51,8 @@ namespace data_structures
         {
             Matrix result(*this);
             for (int i = 0; i < rows; i++)
-            {
                 for (int j = 0; j < cols; j++)
-                {
-                    result.matrix[i][j] -= other.matrix[i][j];
-                }
-            }
+                    result.matrix[i * cols + j] -= other.matrix[i * cols + j];
             return result;
         }
 
@@ -82,12 +60,8 @@ namespace data_structures
         {
             Matrix result(*this);
             for (int i = 0; i < rows; i++)
-            {
                 for (int j = 0; j < cols; j++)
-                {
-                    result.matrix[i][j] *= scalar;
-                }
-            }
+                    result.matrix[i * cols + j] *= scalar;
             return result;
         }
 
@@ -95,12 +69,8 @@ namespace data_structures
         {
             Matrix result(*this);
             for (int i = 0; i < rows; i++)
-            {
                 for (int j = 0; j < cols; j++)
-                {
-                    result.matrix[i][j] *= other.matrix[i][j];
-                }
-            }
+                    result.matrix[i * cols + j] *= other.matrix[i * cols + j];
             return result;
         }
 
@@ -108,12 +78,8 @@ namespace data_structures
         {
             Matrix result(*this);
             for (int i = 0; i < rows; i++)
-            {
                 for (int j = 0; j < cols; j++)
-                {
-                    result.matrix[i][j] /= scalar;
-                }
-            }
+                    result.matrix[i * cols + j] /= scalar;
             return result;
         }
 
@@ -121,12 +87,8 @@ namespace data_structures
         {
             Matrix result(*this);
             for (int i = 0; i < rows; i++)
-            {
                 for (int j = 0; j < cols; j++)
-                {
-                    result.matrix[i][j] /= other.matrix[i][j];
-                }
-            }
+                    result.matrix[i * cols + j] /= other.matrix[i * cols + j];
             return result;
         }
 
@@ -136,7 +98,7 @@ namespace data_structures
             for (int i = 0; i < rows; i++)
                 for (int k = 0; k < cols; k++)
                     for (int j = 0; j < other.cols; j++)
-                        result.matrix[i][j] += matrix[i][k] * other.matrix[k][j];
+                        result.matrix[i * other.cols + j] += matrix[i * cols + k] * other.matrix[k * other.cols + j];
             return result;
         }
 
@@ -144,25 +106,16 @@ namespace data_structures
         {
             Matrix result(*this);
             for (int i = 0; i < rows; i++)
-            {
                 for (int j = 0; j < cols; j++)
-                {
-                    result.matrix[j][i] = matrix[i][j];
-                }
-            }
+                    result.matrix[j * rows + i] = matrix[i * cols + j];
             return result;
         }
 
         void print() const
         {
             for (int i = 0; i < rows; i++)
-            {
                 for (int j = 0; j < cols; j++)
-                {
-                    std::cout << matrix[i][j] << " ";
-                }
-                std::cout << std::endl;
-            }
+                    std::cout << matrix[i * cols + j] << " ";
         }
 
         std::pair<int, int> shape() const
@@ -172,32 +125,34 @@ namespace data_structures
 
         data_structures::Vector get_row(const size_t i) const
         {
-            return data_structures::Vector(matrix[i]);
+            std::vector<double> row(rows);
+            for (int j = 0; j < cols; j++)
+                row[j] = matrix[i * cols + j];
+            return data_structures::Vector(row);
         }
 
         data_structures::Vector get_col(const size_t i) const
         {
             std::vector<double> col;
             for (int j = 0; j < rows; j++)
-            {
-                col.push_back(matrix[j][i]);
-            }
+                col.push_back(matrix[j * cols + i]);
             return data_structures::Vector(col);
         }
 
         double get_value(const size_t i, const size_t j) const
         {
-            return matrix[i][j];
+            return matrix[i * cols + j];
         }
 
         void set_value(const size_t i, const size_t j, const double value)
         {
-            matrix[i][j] = value;
+            matrix[i * cols + j] = value;
         }
 
         void add_row(const std::vector<double> &v)
         {
-            matrix.push_back(v);
+            for (double value : v)
+                matrix.push_back(value);
         }
 
         void set_shape(const size_t n_rows, const size_t n_cols)
@@ -213,7 +168,7 @@ namespace data_structures
             {
                 for (size_t j = col_start; j < col_end; j++)
                 {
-                    result.matrix[i - row_start][j - col_start] = matrix[i][j];
+                    result.matrix[(i - row_start) * (col_end - col_start) + (j - col_start)] = matrix[i * cols + j];
                 }
             }
             return result;
@@ -221,7 +176,8 @@ namespace data_structures
 
         void set_row(const size_t i, const data_structures::Vector &v)
         {
-            matrix[i] = v.get_vector();
+            for (int j = 0; j < cols; j++)
+                matrix[i * cols + j] = v.get(j);
         }
     };
 }

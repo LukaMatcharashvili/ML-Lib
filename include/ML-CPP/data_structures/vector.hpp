@@ -130,7 +130,7 @@ namespace data_structures
         {
             for (const double &element : vector)
                 std::cout << element << " ";
-            std::cout << std::endl;
+            std::cout << '\n';
         }
     };
 }

@@ -38,7 +38,7 @@ int main()
 
     double pred = lr.predict(scaled_train);
 
-    std::cout << "Prediction: " << f_scaling.reverse_scale(pred, 1) << std::endl;
+    std::cout << "Prediction: " << f_scaling.reverse_scale(pred, 1) << '\n';
 
     return 0;
 }

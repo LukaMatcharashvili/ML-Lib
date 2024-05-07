@@ -37,7 +37,7 @@ namespace algorithms
         void print_weights() const
         {
             w.print();
-            std::cout << "b: " << b << std::endl;
+            std::cout << "b: " << b << '\n';
         }
 
         void train()
@@ -116,7 +116,7 @@ namespace algorithms
         void print_weights() const
         {
             w.print();
-            std::cout << "b: " << b << std::endl;
+            std::cout << "b: " << b << '\n';
         }
 
         void train()

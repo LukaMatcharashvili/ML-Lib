@@ -18,7 +18,7 @@ namespace data_import_export
         std::ofstream output_file(weights_and_biases_file_name);
         if (!output_file.is_open())
         {
-            std::cerr << "Error opening the file!" << std::endl;
+            std::cerr << "Error opening the file!" << '\n';
             exit(1);
         }
 
@@ -36,7 +36,7 @@ namespace data_import_export
         std::ifstream input_file(weights_and_biases_file_name);
         if (!input_file.is_open())
         {
-            std::cerr << "Error opening the file!" << std::endl;
+            std::cerr << "Error opening the file!" << '\n';
             exit(1);
         }
 

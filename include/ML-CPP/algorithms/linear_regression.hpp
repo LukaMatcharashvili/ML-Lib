@@ -36,7 +36,7 @@ namespace algorithms
         void print_weights() const
         {
             w.print();
-            std::cout << "b: " << b << std::endl;
+            std::cout << "b: " << b << '\n';
         }
 
         void train()
@@ -61,7 +61,6 @@ namespace algorithms
         {
             const std::pair<int, int> shape = X.shape();
             data_structures::Vector sum(shape.second);
-            sum.zeros();
 
             for (int i = 0; i < shape.first; i++)
             {
@@ -115,7 +114,7 @@ namespace algorithms
         void print_weights() const
         {
             w.print();
-            std::cout << "b: " << b << std::endl;
+            std::cout << "b: " << b << '\n';
         }
 
         void train()

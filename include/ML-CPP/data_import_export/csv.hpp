@@ -16,7 +16,7 @@ namespace data_import_export
         std::ifstream input_file(filename);
         if (!input_file.is_open())
         {
-            std::cerr << "Error opening the file!" << std::endl;
+            std::cerr << "Error opening the file!" << '\n';
             exit(1);
         }
 
@@ -53,7 +53,7 @@ namespace data_import_export
             std::string col = line.substr(start_ptr, col_length);
             row.push_back(std::stof(col));
 
-            std::cout << std::endl;
+            std::cout << '\n';
 
             cols = std::max(cols, current_cols);
             matrix.add_row(row);
