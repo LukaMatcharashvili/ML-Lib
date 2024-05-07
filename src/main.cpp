@@ -9,6 +9,8 @@
 #include <ML-CPP/data_structures/matrix.hpp>
 
 #include <ML-CPP/algorithms/linear_regression.hpp>
+#include <ML-CPP/algorithms/gradient_descent.hpp>
+#include <ML-CPP/algorithms/gradient_descent.hpp>
 
 #include <ML-CPP/features/scaling.hpp>
 
@@ -25,7 +27,7 @@ int main()
     data_structures::Matrix X = scaled_mat.sub_matrix(0, scaled_mat.shape().first, 0, scaled_mat.shape().second - 1);
     data_structures::Vector y = scaled_mat.get_col(scaled_mat.shape().second - 1);
 
-    algorithms::StochasticLinearRegression lr(X, y, 0.001f);
+    algorithms::LinearRegression lr(X, y, 0.001f, algorithms::stochastic_gd::train);
 
     lr.train();
 

@@ -22,3 +22,4 @@ Features:
 - [ ] Neural network
 - [ ] Decision tree
 - [ ] Random forest
+- [ ] Performance measurements
