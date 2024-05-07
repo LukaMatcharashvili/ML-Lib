@@ -19,6 +19,14 @@ namespace data_structures
         {
             matrix.resize(rows * cols);
         }
+        explicit Matrix(const std::vector<double> &matrix, size_t rows, size_t cols) : matrix(matrix), rows(rows), cols(cols) {}
+        explicit Matrix(std::vector<std::vector<double>> matrix) : rows(matrix.size()), cols(matrix[0].size())
+        {
+            matrix.reserve(rows * cols);
+            for (const std::vector<double> &row : matrix)
+                for (double value : row)
+                    this->matrix.push_back(value);
+        }
 
         Matrix operator+(const double scalar) const
         {

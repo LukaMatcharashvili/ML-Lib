@@ -15,6 +15,7 @@ namespace data_structures
         explicit Vector(const std::vector<double> &vector) : vector(vector) {}
         explicit Vector(size_t size)
         {
+            // Initialize vector with zeros
             vector.resize(size);
         }
 
@@ -92,19 +93,11 @@ namespace data_structures
             return vector.size();
         }
 
-        void zeros()
-        {
-            std::fill(vector.begin(), vector.end(), 0);
-        }
-
         double sum() const
         {
             double sum = 0;
             for (const double &element : vector)
-            {
                 sum += element;
-            }
-
             return sum;
         }
 

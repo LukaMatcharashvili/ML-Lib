@@ -62,7 +62,6 @@ namespace algorithms
         {
             const std::pair<int, int> shape = X.shape();
             data_structures::Vector sum(shape.second);
-            sum.zeros();
 
             for (int i = 0; i < shape.first; i++)
             {
@@ -141,7 +140,6 @@ namespace algorithms
         {
             const std::pair<int, int> shape = X.shape();
             data_structures::Vector sum(shape.second);
-            sum.zeros();
 
             data_structures::Vector row = X.get_row(row_idx);
             double error = y.get(row_idx) - predict(row);
