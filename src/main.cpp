@@ -17,7 +17,7 @@
 int main()
 {
     // Example of using the linear regression algorithm: Years of experience, Salary
-    // This example is using: https://www.kaggle.com/datasets/abhishek14398/salary-dataset-simple-linear-regression
+    // This example is using with first column removed (This can be done programmatically): https://www.kaggle.com/datasets/abhishek14398/salary-dataset-simple-linear-regression
     data_structures::Matrix mat = data_import_export::import_csv("Salary_dataset.csv");
 
     features::Scaling f_scaling(mat, features::ScalingType::max_abs);
