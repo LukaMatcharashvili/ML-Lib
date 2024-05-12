@@ -8,15 +8,14 @@ Features:
 - [x] Vector data structures and operations
 - [x] Batch gradient descent
 - [x] Stochastic gradient descent
-- [ ] Mini-batch gradient descent
-- [ ] Utilize multi-threading
+- [x] Mini-batch gradient descent
 - [ ] Support non-numerical data, transform to numerical data
+- [ ] Regularization
 - [x] Loading data from CSV files
 - [x] Data splitting
 - [x] Loading and saving weights and biases to files
 - [x] Feature scaling
 - [x] Polynomial features
-- [ ] Regularization
 - [x] Linear regression
 - [x] Logistic regression
 - [ ] Visualization
@@ -25,3 +24,4 @@ Features:
 - [ ] Decision tree
 - [ ] Random forest
 - [ ] Performance measurements
+- [ ] Utilize multi-threading
