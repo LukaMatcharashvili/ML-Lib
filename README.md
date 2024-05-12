@@ -10,7 +10,6 @@ Features:
 - [x] Stochastic gradient descent
 - [x] Mini-batch gradient descent
 - [ ] Support non-numerical data, transform to numerical data
-- [ ] Regularization
 - [x] Loading data from CSV files
 - [x] Data splitting
 - [x] Loading and saving weights and biases to files
