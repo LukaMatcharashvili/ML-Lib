@@ -21,11 +21,16 @@ namespace algorithms
         data_structures::Vector w_;
         double b_ = 0;
         double lr_;
-        t_trainF trainF_; // TODO: Change this to mini_batch_gd::train when implemented
+        t_trainF trainF_;
 
     public:
         ~LogisticRegression() = default;
-        LogisticRegression(const data_structures::Matrix &x, const data_structures::Vector &y, const data_structures::Vector &w = data_structures::Vector(0), const double lr = 0.01, const t_trainF &trainF = batch_gd::train)
+        LogisticRegression(
+            const data_structures::Matrix &x,
+            const data_structures::Vector &y,
+            const data_structures::Vector &w = data_structures::Vector(0),
+            const double lr = 0.001,
+            const t_trainF &trainF = batch_gd::train)
             : x_(x),
               y_(y),
               w_(w.size() == 0 ? data_structures::Vector(x.shape().second) : w),

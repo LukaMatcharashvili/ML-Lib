@@ -15,7 +15,7 @@ namespace algorithms
     using t_predictionF = std::function<double(const data_structures::Vector &x, const data_structures::Vector &w, double b)>;
 
     using t_trainF = std::function<void(
-        const data_structures::Matrix &X,
+        const data_structures::Matrix &x,
         const data_structures::Vector &y,
         data_structures::Vector &w,
         double &b,
@@ -26,19 +26,19 @@ namespace algorithms
     {
 
         static std::pair<data_structures::Vector, double> cost(
-            const data_structures::Matrix &X,
+            const data_structures::Matrix &x,
             const data_structures::Vector &y,
             const data_structures::Vector &w,
             const double b,
             const t_predictionF &predictF)
         {
-            auto [n_rows, n_cols] = X.shape();
+            auto [n_rows, n_cols] = x.shape();
             data_structures::Vector w_sum(n_cols);
             double b_sum = 0;
 
             for (int i = 0; i < n_rows; i++)
             {
-                auto row = X.get_row(i);
+                auto row = x.get_row(i);
                 double error = y.get(i) - predictF(row, w, b);
 
                 w_sum = (row * -2 * error) + w_sum;
@@ -49,7 +49,7 @@ namespace algorithms
         }
 
         static void train(
-            const data_structures::Matrix &X,
+            const data_structures::Matrix &x,
             const data_structures::Vector &y,
             data_structures::Vector &w,
             double &b,
@@ -58,12 +58,13 @@ namespace algorithms
         {
             while (true)
             {
-                auto [dw, db] = cost(X, y, w, b, predictF);
+                auto [dw, db] = cost(x, y, w, b, predictF);
 
                 auto dw_step = dw * lr;
                 double db_step = db * lr;
 
-                if (std::abs(db) < 0.001)
+                std::cout << " Cost: " << db << '\n';
+                if (std::abs(db_step) < 0.001)
                     break;
 
                 w = w - dw_step;
@@ -93,7 +94,7 @@ namespace algorithms
         }
 
         static void train(
-            const data_structures::Matrix &X,
+            const data_structures::Matrix &x,
             const data_structures::Vector &y,
             data_structures::Vector &w,
             double &b,
@@ -102,13 +103,70 @@ namespace algorithms
         {
             for (size_t i = 0;; i++)
             {
-                int row_idx = i % X.shape().first;
-                auto [dw, db] = cost(X.get_row(row_idx), y.get(row_idx), w, b, predictF);
+                int random_row = rand() % x.shape().first;
+                auto [dw, db] = cost(x.get_row(random_row), y.get(random_row), w, b, predictF);
 
                 data_structures::Vector dw_step = dw * lr;
                 double db_step = db * lr;
 
-                if (std::abs(db) < 0.001)
+                if (std::abs(db_step) < 0.001)
+                    break;
+
+                w = w - dw_step;
+                b = b - db_step;
+            }
+        }
+    };
+
+    namespace mini_batch_gd
+    {
+        static std::pair<data_structures::Vector, double> cost(
+            const data_structures::Matrix &x,
+            const data_structures::Vector &y,
+            const data_structures::Vector &w,
+            const double b,
+            const t_predictionF &predictF)
+        {
+            auto [n_rows, n_cols] = x.shape();
+            data_structures::Vector w_sum(n_cols);
+            double b_sum = 0;
+
+            for (int i = 0; i < n_rows; i++)
+            {
+                auto row = x.get_row(i);
+                double error = y.get(i) - predictF(row, w, b);
+
+                w_sum = (row * -2 * error) + w_sum;
+                b_sum += -2 * error;
+            }
+
+            return std::make_pair(w_sum, b_sum);
+        }
+
+        static void train(
+            const data_structures::Matrix &x,
+            const data_structures::Vector &y,
+            data_structures::Vector &w,
+            double &b,
+            const double lr,
+            const t_predictionF &predictF)
+        {
+            size_t batch_size = x.shape().first / 10;
+            batch_size = batch_size <= 0 ? 1 : batch_size;
+
+            while (true)
+            {
+                data_structures::Matrix random_rows_matrix(batch_size, x.shape().second);
+                for (size_t j = 0; j < batch_size; j++)
+                    random_rows_matrix.set_row(j, x.get_row(rand() % x.shape().first));
+
+                auto [dw, db] = cost(random_rows_matrix, y, w, b, predictF);
+
+                data_structures::Vector dw_step = dw * lr;
+                double db_step = db * lr;
+
+                std::cout << " Cost: " << db << '\n';
+                if (std::abs(db_step) < 0.001)
                     break;
 
                 w = w - dw_step;
@@ -117,7 +175,5 @@ namespace algorithms
         }
 
     };
-
 }
-
 #endif // ALG_GRAD_DESC_H

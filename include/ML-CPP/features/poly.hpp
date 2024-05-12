@@ -14,15 +14,15 @@ namespace features
 {
     namespace poly
     {
-        data_structures::Matrix transform(const data_structures::Matrix &X, const int degree)
+        data_structures::Matrix transform(const data_structures::Matrix &x, const int degree)
         {
-            std::pair<int, int> shape = X.shape();
+            std::pair<int, int> shape = x.shape();
             data_structures::Matrix transformed_matrix(shape.first, shape.second);
 
             for (int i = 0; i < shape.first; i++)
             {
                 std::vector<double> new_row = {1};
-                std::vector<double> curr_row = X.get_row(i).get_vector();
+                std::vector<double> curr_row = x.get_row(i).get_vector();
 
                 for (int j = 1; j <= degree; j++)
                     new_row.push_back(std::pow(curr_row[0], j));

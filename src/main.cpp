@@ -10,7 +10,6 @@
 
 #include <ML-CPP/algorithms/linear_regression.hpp>
 #include <ML-CPP/algorithms/gradient_descent.hpp>
-#include <ML-CPP/algorithms/gradient_descent.hpp>
 
 #include <ML-CPP/features/scaling.hpp>
 
@@ -24,10 +23,10 @@ int main()
 
     data_structures::Matrix scaled_mat = f_scaling.scale(mat);
 
-    data_structures::Matrix X = scaled_mat.sub_matrix(0, scaled_mat.shape().first, 0, scaled_mat.shape().second - 1);
+    data_structures::Matrix x = scaled_mat.sub_matrix(0, scaled_mat.shape().first, 0, scaled_mat.shape().second - 1);
     data_structures::Vector y = scaled_mat.get_col(scaled_mat.shape().second - 1);
 
-    algorithms::LinearRegression lr(X, y, 0.001f);
+    algorithms::LinearRegression lr(x, y, 0.001f);
 
     lr.train();
 
