@@ -29,14 +29,14 @@ namespace algorithms
             const data_structures::Matrix &X,
             const data_structures::Vector &y,
             const data_structures::Vector &w,
-            double &b,
+            const double b,
             const t_predictionF &predictF)
         {
-            const std::pair<int, int> shape = X.shape();
-            data_structures::Vector w_sum(shape.second);
+            auto [n_rows, n_cols] = X.shape();
+            data_structures::Vector w_sum(n_cols);
             double b_sum = 0;
 
-            for (int i = 0; i < shape.first; i++)
+            for (int i = 0; i < n_rows; i++)
             {
                 auto row = X.get_row(i);
                 double error = y.get(i) - predictF(row, w, b);
@@ -78,7 +78,7 @@ namespace algorithms
             const data_structures::Vector &row,
             const double &y,
             const data_structures::Vector &w,
-            const double &b,
+            const double b,
             const t_predictionF &predictF)
         {
             data_structures::Vector w_sum(row.size());

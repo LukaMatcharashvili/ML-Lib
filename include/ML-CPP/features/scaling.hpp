@@ -17,159 +17,119 @@ namespace features
         max_abs,
     };
 
-    class Scaling
+    class AbstractScaler
+    {
+    public:
+        virtual data_structures::Matrix scale(const data_structures::Matrix &mat) = 0;
+        virtual data_structures::Vector scale(const data_structures::Vector &vec) = 0;
+        virtual double reverse_scale(const double value, size_t i) = 0;
+
+        virtual ~AbstractScaler() = default;
+    };
+
+    class MinMaxScaler : public AbstractScaler
     {
     private:
-        ScalingType scaling_type;
-        std::vector<double> min_values;
-        std::vector<double> max_values;
-        std::vector<double> mean_values;
+        std::vector<double> min_values_;
+        std::vector<double> max_values_;
 
-        void set_min_max_scaling_parameters(const data_structures::Matrix &mat)
+        void set_scaling_parameters(const data_structures::Matrix &mat)
         {
-            std::pair<size_t, size_t> shape = mat.shape();
-            min_values = std::vector<double>(shape.second, 0);
-            max_values = std::vector<double>(shape.second, 0);
+            auto [n_rows, n_cols] = mat.shape();
+            min_values_ = std::vector<double>(n_cols, 0);
+            max_values_ = std::vector<double>(n_cols, 0);
 
-            for (size_t i = 0; i < shape.first; i++)
-                for (size_t j = 0; j < shape.second; j++)
+            for (size_t i = 0; i < n_rows; i++)
+                for (size_t j = 0; j < n_cols; j++)
                 {
-                    min_values[j] = std::min(min_values[j], mat.get_value(i, j));
-                    max_values[j] = std::max(max_values[j], mat.get_value(i, j));
+                    min_values_[j] = std::min(min_values_[j], mat.get_value(i, j));
+                    max_values_[j] = std::max(max_values_[j], mat.get_value(i, j));
                 }
         };
 
-        void set_max_abs_scaling_parameters(const data_structures::Matrix &mat)
+    public:
+        ~MinMaxScaler() override = default;
+        explicit MinMaxScaler(const data_structures::Matrix &mat)
         {
-            std::pair<size_t, size_t> shape = mat.shape();
-            max_values = std::vector<double>(shape.second, 0);
+            set_scaling_parameters(mat);
+        }
 
-            for (size_t i = 0; i < shape.first; i++)
-                for (size_t j = 0; j < shape.second; j++)
-                    max_values[j] = std::max(max_values[j], mat.get_value(i, j));
-        };
-
-        data_structures::Matrix min_max_scaling(const data_structures::Matrix &mat, const size_t start, const size_t end)
+        data_structures::Matrix scale(const data_structures::Matrix &mat) override
         {
-            std::pair<size_t, size_t> shape = mat.shape();
+            auto [n_rows, n_cols] = mat.shape();
 
-            data_structures::Matrix result(shape.first, end - start);
-            for (size_t i = 0; i < shape.first; i++)
-                for (size_t j = start; j < end; j++)
-                    result.set_value(i, j, (mat.get_value(i, j) - min_values[j]) / (max_values[j] - min_values[j]));
+            data_structures::Matrix result(n_rows, n_cols);
+            for (size_t i = 0; i < n_rows; i++)
+                for (size_t j = 0; j < n_cols; j++)
+                    result.set_value(i, j, (mat.get_value(i, j) - min_values_[j]) / (max_values_[j] - min_values_[j]));
 
             return result;
-        };
+        }
 
-        data_structures::Matrix max_abs_scaling(const data_structures::Matrix &mat, const size_t start, const size_t end)
+        data_structures::Vector scale(const data_structures::Vector &vec) override
         {
-            std::pair<size_t, size_t> shape = mat.shape();
-
-            data_structures::Matrix result(shape.first, end - start);
-            for (size_t i = 0; i < shape.first; i++)
-                for (size_t j = start; j < end; j++)
-                    result.set_value(i, j, mat.get_value(i, j) / max_values[j]);
-
+            size_t n_cols = vec.size();
+            data_structures::Vector result(n_cols);
+            for (size_t i = 0; i < n_cols; i++)
+                result.set(i, (vec.get(i) - min_values_[i]) / (max_values_[i] - min_values_[i]));
             return result;
+        }
+
+        double reverse_scale(const double value, size_t i) override
+        {
+            return value * (max_values_[i] - min_values_[i]) + min_values_[i];
+        }
+    };
+
+    class MaxAbsScaler : public AbstractScaler
+    {
+    private:
+        std::vector<double> max_values_;
+
+        void set_scaling_parameters(const data_structures::Matrix &mat)
+        {
+            auto [n_rows, n_cols] = mat.shape();
+            max_values_ = std::vector<double>(n_cols, 0);
+
+            for (size_t i = 0; i < n_rows; i++)
+                for (size_t j = 0; j < n_cols; j++)
+                    max_values_[j] = std::max(max_values_[j], mat.get_value(i, j));
         };
 
     public:
-        explicit Scaling(const data_structures::Matrix &mat, ScalingType scaling_type = ScalingType::max_abs) : scaling_type(scaling_type)
+        ~MaxAbsScaler() override = default;
+        explicit MaxAbsScaler(const data_structures::Matrix &mat)
         {
-            switch (scaling_type)
-            {
-            case ScalingType::min_max:
-                set_min_max_scaling_parameters(mat);
-                break;
-            case ScalingType::max_abs:
-                set_max_abs_scaling_parameters(mat);
-                break;
-            }
+            set_scaling_parameters(mat);
         }
 
-        data_structures::Matrix scale(const data_structures::Matrix &mat, size_t start, size_t end)
+        data_structures::Matrix scale(const data_structures::Matrix &mat) override
         {
-            switch (scaling_type)
-            {
-            case ScalingType::min_max:
-                return min_max_scaling(mat, start, end);
-            case ScalingType::max_abs:
-                return max_abs_scaling(mat, start, end);
-            }
+            auto [n_rows, n_cols] = mat.shape();
+
+            data_structures::Matrix result(n_rows, n_cols);
+            for (size_t i = 0; i < n_rows; i++)
+                for (size_t j = 0; j < n_cols; j++)
+                    result.set_value(i, j, mat.get_value(i, j) / max_values_[j]);
+
+            return result;
         }
 
-        data_structures::Matrix scale(const data_structures::Matrix &mat)
-        {
-            size_t n_cols = mat.shape().second;
-            switch (scaling_type)
-            {
-            case ScalingType::min_max:
-                return min_max_scaling(mat, 0, n_cols);
-            case ScalingType::max_abs:
-                return max_abs_scaling(mat, 0, n_cols);
-            default:
-                exit(1);
-            }
-        }
-
-        data_structures::Vector scale(const data_structures::Vector &vec, size_t start, size_t end)
-        {
-            switch (scaling_type)
-            {
-            case ScalingType::min_max:
-            {
-                data_structures::Vector result(end - start);
-                for (size_t i = start; i < end; i++)
-                    result.set(i, (vec.get(i) - min_values[i]) / (max_values[i] - min_values[i]));
-                return result;
-            }
-            case ScalingType::max_abs:
-            {
-                data_structures::Vector result(end - start);
-                for (size_t i = start; i < end; i++)
-                    result.set(i, vec.get(i) / max_values[i]);
-                return result;
-            }
-            }
-        }
-
-        data_structures::Vector scale(const data_structures::Vector &vec)
+        data_structures::Vector scale(const data_structures::Vector &vec) override
         {
             size_t n_cols = vec.size();
-            switch (scaling_type)
-            {
-            case ScalingType::min_max:
-            {
-                data_structures::Vector result(n_cols);
-                for (size_t i = 0; i < n_cols; i++)
-                    result.set(i, (vec.get(i) - min_values[i]) / (max_values[i] - min_values[i]));
-                return result;
-            }
-            case ScalingType::max_abs:
-            {
-                data_structures::Vector result(n_cols);
-                for (size_t i = 0; i < n_cols; i++)
-                    result.set(i, vec.get(i) / max_values[i]);
-                return result;
-            }
-            default:
-                exit(1);
-            }
+            data_structures::Vector result(n_cols);
+            for (size_t i = 0; i < n_cols; i++)
+                result.set(i, vec.get(i) / max_values_[i]);
+            return result;
         }
 
-        double reverse_scale(const double value, size_t i)
+        double reverse_scale(const double value, size_t i) override
         {
-            switch (scaling_type)
-            {
-            case ScalingType::min_max:
-                return value * (max_values[i] - min_values[i]) + min_values[i];
-            case ScalingType::max_abs:
-                return value * max_values[i];
-            default:
-                exit(1);
-            }
+            return value * max_values_[i];
         }
     };
+
 }
 
 #endif // FEATURES_SCALING_H

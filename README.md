@@ -10,6 +10,7 @@ Features:
 - [x] Stochastic gradient descent
 - [ ] Mini-batch gradient descent
 - [ ] Utilize multi-threading
+- [ ] Support non-numerical data, transform to numerical data
 - [x] Loading data from CSV files
 - [x] Data splitting
 - [x] Loading and saving weights and biases to files
@@ -20,6 +21,7 @@ Features:
 - [x] Logistic regression
 - [ ] Visualization
 - [ ] Neural network
+- [ ] Utilize GPU
 - [ ] Decision tree
 - [ ] Random forest
 - [ ] Performance measurements

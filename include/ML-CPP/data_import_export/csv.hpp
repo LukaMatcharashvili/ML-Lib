@@ -51,9 +51,7 @@ namespace data_import_export
             }
 
             std::string col = line.substr(start_ptr, col_length);
-            row.push_back(std::stof(col));
-
-            std::cout << '\n';
+            row.push_back(std::stod(col));
 
             cols = std::max(cols, current_cols);
             matrix.add_row(row);

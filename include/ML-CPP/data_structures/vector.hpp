@@ -9,26 +9,40 @@ namespace data_structures
     class Vector
     {
     private:
-        std::vector<double> vector;
+        std::vector<double> vector_;
 
     public:
-        explicit Vector(const std::vector<double> &vector) : vector(vector) {}
+        ~Vector() = default;
+        explicit Vector(const std::vector<double> &vector) : vector_(vector) {}
         explicit Vector(size_t size)
         {
-            // Initialize vector with zeros
-            vector.resize(size);
+            // Initialize vector_ with zeros
+            vector_.resize(size);
+        }
+
+        static inline Vector zeros(size_t size)
+        {
+            return Vector(size);
+        }
+
+        static inline Vector ones(size_t size)
+        {
+            Vector result(size);
+            for (double &element : result.vector_)
+                element = 1;
+            return result;
         }
 
         std::vector<double> get_vector() const
         {
-            return vector;
+            return vector_;
         }
 
         Vector operator+(const double scalar) const
         {
             Vector result(*this);
             for (int i = 0; i < result.size(); i++)
-                result.vector[i] += scalar;
+                result.vector_[i] += scalar;
             return result;
         }
 
@@ -36,7 +50,7 @@ namespace data_structures
         {
             Vector result(*this);
             for (int i = 0; i < result.size(); i++)
-                result.vector[i] += other.vector[i];
+                result.vector_[i] += other.vector_[i];
             return result;
         }
 
@@ -44,7 +58,7 @@ namespace data_structures
         {
             Vector result(*this);
             for (int i = 0; i < result.size(); i++)
-                result.vector[i] -= scalar;
+                result.vector_[i] -= scalar;
             return result;
         }
 
@@ -52,7 +66,7 @@ namespace data_structures
         {
             Vector result(*this);
             for (int i = 0; i < result.size(); i++)
-                result.vector[i] -= other.vector[i];
+                result.vector_[i] -= other.vector_[i];
             return result;
         }
 
@@ -60,7 +74,7 @@ namespace data_structures
         {
             Vector result(*this);
             for (int i = 0; i < result.size(); i++)
-                result.vector[i] *= scalar;
+                result.vector_[i] *= scalar;
             return result;
         }
 
@@ -68,7 +82,7 @@ namespace data_structures
         {
             Vector result(*this);
             for (int i = 0; i < result.size(); i++)
-                result.vector[i] *= other.vector[i];
+                result.vector_[i] *= other.vector_[i];
             return result;
         }
 
@@ -76,7 +90,7 @@ namespace data_structures
         {
             Vector result(*this);
             for (int i = 0; i < result.size(); i++)
-                result.vector[i] /= scalar;
+                result.vector_[i] /= scalar;
             return result;
         }
 
@@ -84,44 +98,44 @@ namespace data_structures
         {
             Vector result(*this);
             for (int i = 0; i < result.size(); i++)
-                result.vector[i] /= other.vector[i];
+                result.vector_[i] /= other.vector_[i];
             return result;
         }
 
         size_t size() const
         {
-            return vector.size();
+            return vector_.size();
         }
 
         double sum() const
         {
             double sum = 0;
-            for (const double &element : vector)
+            for (const double &element : vector_)
                 sum += element;
             return sum;
         }
 
         double get(const size_t i) const
         {
-            return vector[i];
+            return vector_[i];
         }
 
         void set(const size_t i, const double value)
         {
-            vector[i] = value;
+            vector_[i] = value;
         }
 
         double dot(const Vector &other) const
         {
             Vector result(*this);
             for (int i = 0; i < result.size(); i++)
-                result.vector[i] *= other.vector[i];
+                result.vector_[i] *= other.vector_[i];
             return result.sum();
         }
 
         void print() const
         {
-            for (const double &element : vector)
+            for (const double &element : vector_)
                 std::cout << element << " ";
             std::cout << '\n';
         }

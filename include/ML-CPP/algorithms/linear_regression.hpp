@@ -15,52 +15,53 @@ namespace algorithms
     class LinearRegression
     {
     private:
-        data_structures::Matrix X;
-        data_structures::Vector y;
-        data_structures::Vector w;
-        double b = 0;
-        double lr = 0.01;
-        t_trainF trainF; // TODO: Change this to mini_batch_gd::train when implemented
+        data_structures::Matrix x_;
+        data_structures::Vector y_;
+        data_structures::Vector w_;
+        double b_ = 0;
+        double lr_;
+        t_trainF trainF_; // TODO: Change this to mini_batch_gd::train when implemented
 
     public:
-        LinearRegression(const data_structures::Matrix &X, const data_structures::Vector &y, const double lr, const t_trainF &trainF = batch_gd::train)
-            : X(X),
-              y(y),
-              w(data_structures::Vector(X.shape().second)),
-              lr(lr),
-              trainF(trainF)
+        ~LinearRegression() = default;
+        LinearRegression(
+            const data_structures::Matrix &x,
+            const data_structures::Vector &y,
+            const double lr = 0.01,
+            const data_structures::Vector &w = data_structures::Vector(0),
+            const t_trainF &trainF = batch_gd::train)
+            : x_(x),
+              y_(y),
+              w_(w.size() == 0 ? data_structures::Vector(x.shape().second) : w),
+              lr_(lr),
+              trainF_(trainF)
         {
         }
-        LinearRegression(const data_structures::Matrix &X, const data_structures::Vector &y, const t_trainF &trainF = batch_gd::train)
-            : X(X),
-              y(y),
-              w(data_structures::Vector(X.shape().second)),
-              trainF(trainF) {}
 
         data_structures::Vector get_weights() const
         {
-            return w;
+            return w_;
         }
 
         double get_bias() const
         {
-            return b;
+            return b_;
         }
 
         void print_weights() const
         {
-            w.print();
-            std::cout << "b: " << b << '\n';
+            w_.print();
+            std::cout << "b_: " << b_ << '\n';
         }
 
         void train()
         {
-            trainF(X, y, w, b, lr, static_predictions::linear_predict);
+            trainF_(x_, y_, w_, b_, lr_, static_predictions::linear_predict);
         }
 
         inline double predict(const data_structures::Vector &x) const
         {
-            return x.dot(w) + b;
+            return x.dot(w_) + b_;
         }
     };
 }

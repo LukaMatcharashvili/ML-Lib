@@ -20,14 +20,14 @@ int main()
     // This example is using with first column removed (This can be done programmatically): https://www.kaggle.com/datasets/abhishek14398/salary-dataset-simple-linear-regression
     data_structures::Matrix mat = data_import_export::import_csv("Salary_dataset.csv");
 
-    features::Scaling f_scaling(mat, features::ScalingType::max_abs);
+    features::MaxAbsScaler f_scaling(mat);
 
     data_structures::Matrix scaled_mat = f_scaling.scale(mat);
 
     data_structures::Matrix X = scaled_mat.sub_matrix(0, scaled_mat.shape().first, 0, scaled_mat.shape().second - 1);
     data_structures::Vector y = scaled_mat.get_col(scaled_mat.shape().second - 1);
 
-    algorithms::LinearRegression lr(X, y, 0.001f, algorithms::stochastic_gd::train);
+    algorithms::LinearRegression lr(X, y, 0.001f);
 
     lr.train();
 
