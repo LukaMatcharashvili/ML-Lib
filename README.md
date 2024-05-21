@@ -17,10 +17,14 @@ Features:
 - [x] Polynomial features
 - [x] Linear regression
 - [x] Logistic regression
+- [ ] Locally weighted
+- [ ] K-means
+- [ ] K-nearest neighbors
 - [ ] Visualization
 - [ ] Neural network
 - [ ] Utilize GPU
 - [ ] Decision tree
+- [ ] Support vector machine
 - [ ] Random forest
 - [ ] Performance measurements
 - [ ] Utilize multi-threading
