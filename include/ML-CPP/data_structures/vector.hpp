@@ -6,14 +6,16 @@
 
 namespace data_structures
 {
+
+    template <typename T>
     class Vector
     {
     private:
-        std::vector<double> vector_;
+        std::vector<T> vector_;
 
     public:
         ~Vector() = default;
-        explicit Vector(const std::vector<double> &vector) : vector_(vector) {}
+        explicit Vector(const std::vector<T> &vector) : vector_(vector) {}
         explicit Vector(size_t size)
         {
             // Initialize vector_ with zeros
@@ -28,20 +30,20 @@ namespace data_structures
         static inline Vector ones(size_t size)
         {
             Vector result(size);
-            for (double &element : result.vector_)
+            for (T &element : result.vector_)
                 element = 1;
             return result;
         }
 
-        std::vector<double> get_vector() const
+        std::vector<T> get_vector() const
         {
             return vector_;
         }
 
-        Vector operator+(const double scalar) const
+        Vector operator+(const T scalar) const
         {
             Vector result(*this);
-            for (int i = 0; i < result.size(); i++)
+            for (size_t i = 0; i < result.size(); i++)
                 result.vector_[i] += scalar;
             return result;
         }
@@ -49,15 +51,15 @@ namespace data_structures
         Vector operator+(Vector &other) const
         {
             Vector result(*this);
-            for (int i = 0; i < result.size(); i++)
+            for (size_t i = 0; i < result.size(); i++)
                 result.vector_[i] += other.vector_[i];
             return result;
         }
 
-        Vector operator-(const double scalar) const
+        Vector operator-(const T scalar) const
         {
             Vector result(*this);
-            for (int i = 0; i < result.size(); i++)
+            for (size_t i = 0; i < result.size(); i++)
                 result.vector_[i] -= scalar;
             return result;
         }
@@ -65,15 +67,15 @@ namespace data_structures
         Vector operator-(const Vector &other) const
         {
             Vector result(*this);
-            for (int i = 0; i < result.size(); i++)
+            for (size_t i = 0; i < result.size(); i++)
                 result.vector_[i] -= other.vector_[i];
             return result;
         }
 
-        Vector operator*(const double scalar) const
+        Vector operator*(const T scalar) const
         {
             Vector result(*this);
-            for (int i = 0; i < result.size(); i++)
+            for (size_t i = 0; i < result.size(); i++)
                 result.vector_[i] *= scalar;
             return result;
         }
@@ -81,15 +83,15 @@ namespace data_structures
         Vector operator*(const Vector &other) const
         {
             Vector result(*this);
-            for (int i = 0; i < result.size(); i++)
+            for (size_t i = 0; i < result.size(); i++)
                 result.vector_[i] *= other.vector_[i];
             return result;
         }
 
-        Vector operator/(const double scalar) const
+        Vector operator/(const T scalar) const
         {
             Vector result(*this);
-            for (int i = 0; i < result.size(); i++)
+            for (size_t i = 0; i < result.size(); i++)
                 result.vector_[i] /= scalar;
             return result;
         }
@@ -97,7 +99,7 @@ namespace data_structures
         Vector operator/(const Vector &other) const
         {
             Vector result(*this);
-            for (int i = 0; i < result.size(); i++)
+            for (size_t i = 0; i < result.size(); i++)
                 result.vector_[i] /= other.vector_[i];
             return result;
         }
@@ -107,35 +109,35 @@ namespace data_structures
             return vector_.size();
         }
 
-        double sum() const
+        T sum() const
         {
-            double sum = 0;
-            for (const double &element : vector_)
+            T sum = 0;
+            for (const T &element : vector_)
                 sum += element;
             return sum;
         }
 
-        double get(const size_t i) const
+        T get(const size_t i) const
         {
             return vector_[i];
         }
 
-        void set(const size_t i, const double value)
+        void set(const size_t i, const T value)
         {
             vector_[i] = value;
         }
 
-        double dot(const Vector &other) const
+        T dot(const Vector &other) const
         {
             Vector result(*this);
-            for (int i = 0; i < result.size(); i++)
+            for (size_t i = 0; i < result.size(); i++)
                 result.vector_[i] *= other.vector_[i];
             return result.sum();
         }
 
         void print() const
         {
-            for (const double &element : vector_)
+            for (const T &element : vector_)
                 std::cout << element << " ";
             std::cout << '\n';
         }

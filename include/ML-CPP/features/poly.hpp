@@ -10,32 +10,29 @@
 
 #include <cmath>
 
-namespace features
+namespace features::poly
 {
-    namespace poly
+    data_structures::Matrix<double> transform(const data_structures::Matrix<double> &x, const int degree)
     {
-        data_structures::Matrix transform(const data_structures::Matrix &x, const int degree)
+        auto [n_rows, n_cols] = x.shape();
+        data_structures::Matrix<double> transformed_matrix(n_rows, n_cols);
+
+        for (size_t i = 0; i < n_rows; i++)
         {
-            std::pair<int, int> shape = x.shape();
-            data_structures::Matrix transformed_matrix(shape.first, shape.second);
+            std::vector<double> new_row = {1};
+            std::vector<double> curr_row = x.get_row(i).get_vector();
 
-            for (int i = 0; i < shape.first; i++)
-            {
-                std::vector<double> new_row = {1};
-                std::vector<double> curr_row = x.get_row(i).get_vector();
+            for (size_t j = 1; j <= degree; j++)
+                new_row.push_back(std::pow(curr_row[0], j));
 
-                for (int j = 1; j <= degree; j++)
-                    new_row.push_back(std::pow(curr_row[0], j));
+            for (double val : curr_row)
+                for (size_t j = 1; j <= n_cols; j++)
+                    new_row.push_back(std::pow(val, curr_row[j]));
 
-                for (double val : curr_row)
-                    for (int j = 1; j <= shape.second; j++)
-                        new_row.push_back(std::pow(val, curr_row[j]));
-
-                transformed_matrix.set_row(i, data_structures::Vector(new_row));
-            }
-
-            return transformed_matrix;
+            transformed_matrix.set_row(i, data_structures::Vector<double>(new_row));
         }
+
+        return transformed_matrix;
     }
 }
 

@@ -13,12 +13,12 @@ namespace algorithms
 {
     namespace static_predictions
     {
-        static inline double logistic_predict(const data_structures::Vector &x, const data_structures::Vector &w, double b)
+        static inline double logistic_predict(const data_structures::Vector<double> &x, const data_structures::Vector<double> &w, double b)
         {
             return features::activations::sigmoid(x.dot(w) + b);
         }
 
-        static inline double linear_predict(const data_structures::Vector &x, const data_structures::Vector &w, double b)
+        static inline double linear_predict(const data_structures::Vector<double> &x, const data_structures::Vector<double> &w, double b)
         {
             return x.dot(w) + b;
         }

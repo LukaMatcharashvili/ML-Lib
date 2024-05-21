@@ -20,8 +20,8 @@ namespace features
     class AbstractScaler
     {
     public:
-        virtual data_structures::Matrix scale(const data_structures::Matrix &mat) = 0;
-        virtual data_structures::Vector scale(const data_structures::Vector &vec) = 0;
+        virtual data_structures::Matrix<double> scale(const data_structures::Matrix<double> &mat) = 0;
+        virtual data_structures::Vector<double> scale(const data_structures::Vector<double> &vec) = 0;
         virtual double reverse_scale(const double value, size_t i) = 0;
 
         virtual ~AbstractScaler() = default;
@@ -33,7 +33,7 @@ namespace features
         std::vector<double> min_values_;
         std::vector<double> max_values_;
 
-        void set_scaling_parameters(const data_structures::Matrix &mat)
+        void set_scaling_parameters(const data_structures::Matrix<double> &mat)
         {
             auto [n_rows, n_cols] = mat.shape();
             min_values_ = std::vector<double>(n_cols, 0);
@@ -49,16 +49,16 @@ namespace features
 
     public:
         ~MinMaxScaler() override = default;
-        explicit MinMaxScaler(const data_structures::Matrix &mat)
+        explicit MinMaxScaler(const data_structures::Matrix<double> &mat)
         {
             set_scaling_parameters(mat);
         }
 
-        data_structures::Matrix scale(const data_structures::Matrix &mat) override
+        data_structures::Matrix<double> scale(const data_structures::Matrix<double> &mat) override
         {
             auto [n_rows, n_cols] = mat.shape();
 
-            data_structures::Matrix result(n_rows, n_cols);
+            data_structures::Matrix<double> result(n_rows, n_cols);
             for (size_t i = 0; i < n_rows; i++)
                 for (size_t j = 0; j < n_cols; j++)
                     result.set_value(i, j, (mat.get_value(i, j) - min_values_[j]) / (max_values_[j] - min_values_[j]));
@@ -66,10 +66,10 @@ namespace features
             return result;
         }
 
-        data_structures::Vector scale(const data_structures::Vector &vec) override
+        data_structures::Vector<double> scale(const data_structures::Vector<double> &vec) override
         {
             size_t n_cols = vec.size();
-            data_structures::Vector result(n_cols);
+            data_structures::Vector<double> result(n_cols);
             for (size_t i = 0; i < n_cols; i++)
                 result.set(i, (vec.get(i) - min_values_[i]) / (max_values_[i] - min_values_[i]));
             return result;
@@ -86,7 +86,7 @@ namespace features
     private:
         std::vector<double> max_values_;
 
-        void set_scaling_parameters(const data_structures::Matrix &mat)
+        void set_scaling_parameters(const data_structures::Matrix<double> &mat)
         {
             auto [n_rows, n_cols] = mat.shape();
             max_values_ = std::vector<double>(n_cols, 0);
@@ -98,16 +98,16 @@ namespace features
 
     public:
         ~MaxAbsScaler() override = default;
-        explicit MaxAbsScaler(const data_structures::Matrix &mat)
+        explicit MaxAbsScaler(const data_structures::Matrix<double> &mat)
         {
             set_scaling_parameters(mat);
         }
 
-        data_structures::Matrix scale(const data_structures::Matrix &mat) override
+        data_structures::Matrix<double> scale(const data_structures::Matrix<double> &mat) override
         {
             auto [n_rows, n_cols] = mat.shape();
 
-            data_structures::Matrix result(n_rows, n_cols);
+            data_structures::Matrix<double> result(n_rows, n_cols);
             for (size_t i = 0; i < n_rows; i++)
                 for (size_t j = 0; j < n_cols; j++)
                     result.set_value(i, j, mat.get_value(i, j) / max_values_[j]);
@@ -115,10 +115,10 @@ namespace features
             return result;
         }
 
-        data_structures::Vector scale(const data_structures::Vector &vec) override
+        data_structures::Vector<double> scale(const data_structures::Vector<double> &vec) override
         {
             size_t n_cols = vec.size();
-            data_structures::Vector result(n_cols);
+            data_structures::Vector<double> result(n_cols);
             for (size_t i = 0; i < n_cols; i++)
                 result.set(i, vec.get(i) / max_values_[i]);
             return result;

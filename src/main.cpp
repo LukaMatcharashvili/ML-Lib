@@ -12,19 +12,25 @@
 #include <ML-CPP/algorithms/gradient_descent.hpp>
 
 #include <ML-CPP/features/scaling.hpp>
+#include <ML-CPP/features/encoding.hpp>
 
 int main()
 {
-    // Example of using the linear regression algorithm: Years of experience, Salary
-    // This example is using with first column removed (This can be done programmatically): https://www.kaggle.com/datasets/abhishek14398/salary-dataset-simple-linear-regression
-    data_structures::Matrix mat = data_import_export::import_csv("Salary_dataset.csv");
+    // Example of using the linear regression algorithm
+    // This example is using: https://www.kaggle.com/datasets/abhishek14398/salary-dataset-simple-linear-regression
+    // Columns: NRow, YearsExperience, Salary
+
+    auto inp = data_import_export::import_csv("Salary_dataset.csv");
+    inp = inp.sub_matrix(1, inp.shape().first, 1, inp.shape().second);
+
+    auto mat = features::encoding::parse(inp, {features::encoding::DataType::NUMERICAL, features::encoding::DataType::NUMERICAL});
 
     features::MaxAbsScaler f_scaling(mat);
 
-    data_structures::Matrix scaled_mat = f_scaling.scale(mat);
+    data_structures::Matrix<double> scaled_mat = f_scaling.scale(mat);
 
-    data_structures::Matrix x = scaled_mat.sub_matrix(0, scaled_mat.shape().first, 0, scaled_mat.shape().second - 1);
-    data_structures::Vector y = scaled_mat.get_col(scaled_mat.shape().second - 1);
+    data_structures::Matrix<double> x = scaled_mat.sub_matrix(0, scaled_mat.shape().first, 0, scaled_mat.shape().second - 1);
+    data_structures::Vector<double> y = scaled_mat.get_column(scaled_mat.shape().second - 1);
 
     algorithms::LinearRegression lr(x, y, 0.001f);
 
@@ -34,8 +40,8 @@ int main()
 
     data_import_export::export_weights_and_biases(lr.get_weights(), lr.get_bias());
 
-    data_structures::Vector train(std::vector<double>{3});
-    data_structures::Vector scaled_train = f_scaling.scale(train);
+    data_structures::Vector<double> train(std::vector<double>{3});
+    data_structures::Vector<double> scaled_train = f_scaling.scale(train);
 
     double pred = lr.predict(scaled_train);
 

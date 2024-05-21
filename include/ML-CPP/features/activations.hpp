@@ -7,14 +7,11 @@
 
 #include <cmath>
 
-namespace features
+namespace features::activations
 {
-    namespace activations
+    double sigmoid(const double x)
     {
-        double sigmoid(const double x)
-        {
-            return 1 / (1 + std::exp(-x));
-        }
+        return 1 / (1 + std::exp(-x));
     }
 }
 

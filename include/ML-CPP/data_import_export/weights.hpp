@@ -13,7 +13,7 @@ namespace data_import_export
 {
     const std::string weights_and_biases_file_name = "weights_and_biases";
 
-    void export_weights_and_biases(const data_structures::Vector &w, const double b)
+    void export_weights_and_biases(const data_structures::Vector<double> &w, const double b)
     {
         std::ofstream output_file(weights_and_biases_file_name);
         if (!output_file.is_open())
@@ -22,7 +22,7 @@ namespace data_import_export
             exit(1);
         }
 
-        for (int i = 0; i < w.size(); i++)
+        for (size_t i = 0; i < w.size(); i++)
             output_file << w.get(i) << ",";
 
         output_file << "\n";
@@ -31,7 +31,7 @@ namespace data_import_export
         output_file.close();
     }
 
-    std::pair<data_structures::Vector, double> import_weights_and_biases()
+    std::pair<data_structures::Vector<double>, double> import_weights_and_biases()
     {
         std::ifstream input_file(weights_and_biases_file_name);
         if (!input_file.is_open())
@@ -62,7 +62,7 @@ namespace data_import_export
 
         input_file.close();
 
-        return std::make_pair(data_structures::Vector(weights), std::stod(bias_str));
+        return std::make_pair(data_structures::Vector<double>(weights), std::stod(bias_str));
     }
 }
 
